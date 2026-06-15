@@ -350,19 +350,6 @@ nginx/certs/inventory.example.local.key
 
 For production, use a certificate trusted by your internal clients. If certificates are renewed outside this project, copy the refreshed files into `nginx/certs/`. Nginx reloads periodically using `NGINX_RELOAD_INTERVAL_SECONDS`.
 
-## Security Checklist Before Push
-
-Do not commit:
-
-- `.env`
-- certificate private keys
-- real AD CA certificates if they are internal
-- generated Excel exports/imports
-- printer CSV with real IPs
-- database volumes
-- logs
-- screenshots containing users, hostnames, IPs, or credentials
-
 Run:
 
 ```bash
@@ -371,6 +358,4 @@ rg -n "PASSWORD|TOKEN|SECRET|PRIVATE KEY|example.local|192.0.2.|198.51.100.|203.
 
 The `example.local`, `192.0.2.0/24`, `198.51.100.0/24`, and `203.0.113.0/24` values are documentation placeholders.
 
-## License
 
-Add your preferred license before publishing.
