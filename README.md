@@ -13,8 +13,6 @@ The project runs in Docker Compose and includes:
 - Hardware collector over WinRM/CIM for CPU, RAM, disks, GPU, motherboard, monitors, and network adapters.
 - Excel import/export for manual fields.
 
-No secrets are committed. Copy `.env.example` to `.env` and fill your own values.
-
 ## Repository Layout
 
 ```text
