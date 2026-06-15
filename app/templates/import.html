@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Імпорт XLSX{% endblock %}
+{% block content %}
+<section class="toolbar">
+  <div>
+    <h1>Імпорт XLSX</h1>
+    <p>Завантажує існуючий файл і переносить ручні поля у PostgreSQL по колонці hostname.</p>
+  </div>
+</section>
+
+{% if imported is not none %}
+<div class="notice">Імпортовано записів: {{ imported }}</div>
+{% endif %}
+
+<form class="upload-form" method="post" enctype="multipart/form-data">
+  <input type="file" name="file" accept=".xlsx" required>
+  <button type="submit">Імпортувати</button>
+</form>
+{% endblock %}
+

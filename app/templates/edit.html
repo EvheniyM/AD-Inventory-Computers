@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ machine.hostname }}{% endblock %}
+{% block content %}
+<section class="toolbar">
+  <div>
+    <h1>{{ machine.hostname }}</h1>
+    <p>{{ machine.full_name or "Користувач не знайдений" }}{% if machine.position_title %}; {{ machine.position_title }}{% endif %}</p>
+  </div>
+  <a class="button secondary" href="/">Назад</a>
+</section>
+
+<section class="detail-grid">
+  <div class="facts">
+    <h2>Дані з AD</h2>
+    <dl>
+      <dt>CN PC</dt><dd>{{ machine.computer_dn.split(",")[0] if machine.computer_dn else "" }}</dd>
+      <dt>OU</dt><dd>{{ machine.source_ou or "" }}</dd>
+      <dt>AD user</dt><dd>{{ machine.ad_user_sam or "" }}</dd>
+      <dt>Статус збігу</dt><dd>{{ machine.match_status }} ({{ machine.match_score }})</dd>
+      <dt>Нотатка</dt><dd>{{ machine.match_note or "" }}</dd>
+    </dl>
+  </div>
+
+  <form class="edit-form" method="post">
+    <h2>Картка комп'ютера</h2>
+    <label>Працює на<input name="works_on" value="{{ machine.works_on or '' }}"></label>
+    <label>IP<input name="ip_address" value="{{ machine.ip_address or '' }}"></label>
+    <label>MAC<input name="mac_address" value="{{ machine.mac_address or '' }}"></label>
+    <label>Розетка<input name="socket" value="{{ machine.socket or '' }}"></label>
+    <label>Інв. ПК<input name="inventory_pc" value="{{ machine.inventory_pc or '' }}"></label>
+    <label>Комутатор:порт<input name="switch_port" value="{{ machine.switch_port or '' }}"></label>
+    <label>Локація<input name="location" value="{{ machine.location or '' }}"></label>
+    <label>Доступ<input name="oschad_access" value="{{ machine.oschad_access or '' }}"></label>
+    <label class="wide">Примітка<textarea name="note" rows="5">{{ machine.note or '' }}</textarea></label>
+    <h2>Технічні характеристики</h2>
+    <label>Процесор<input name="hardware_cpu" value="{{ machine.hardware_cpu or '' }}"></label>
+    <label class="wide">ОЗУ<textarea name="hardware_ram" rows="3">{{ machine.hardware_ram or '' }}</textarea></label>
+    <label>Відеокарта<input name="hardware_gpu" value="{{ machine.hardware_gpu or '' }}"></label>
+    <label>Материнська плата<input name="hardware_motherboard" value="{{ machine.hardware_motherboard or '' }}"></label>
+    <label class="wide">Диски<textarea name="hardware_disks" rows="4">{{ machine.hardware_disks or '' }}</textarea></label>
+    <label class="wide">Монітори<textarea name="hardware_monitors" rows="3">{{ machine.hardware_monitors or '' }}</textarea></label>
+    <label class="wide">Мережеві адаптери<textarea name="hardware_network" rows="4">{{ machine.hardware_network or '' }}</textarea></label>
+    <div class="actions">
+      <button type="submit">Зберегти</button>
+      <a class="button secondary" href="/">Скасувати</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

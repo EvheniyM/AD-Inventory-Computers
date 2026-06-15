@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}PC and VM{% endblock %}
+{% block content %}
+<section class="toolbar">
+  <div>
+    <h1>PC and VM</h1>
+    <p>{{ machines|length }} показано з {{ total }} записів{% if last_event %}; остання синхронізація: {{ last_event.status }}{% endif %}</p>
+  </div>
+  <form method="post" action="/sync/run">
+    <button type="submit">Синхронізувати AD</button>
+  </form>
+</section>
+
+{% if msg %}
+<div class="notice">{{ msg }}</div>
+{% endif %}
+
+<form class="filters" method="get" action="/">
+  <input name="q" value="{{ q }}" placeholder="Пошук: ПІБ, hostname, IP, інв. ПК">
+  <select name="source_type">
+    <option value="" {% if not source_type %}selected{% endif %}>Всі типи</option>
+    <option value="physical" {% if source_type == "physical" %}selected{% endif %}>Фізичні ПК</option>
+    <option value="virtual" {% if source_type == "virtual" %}selected{% endif %}>ВМ</option>
+    <option value="server" {% if source_type == "server" %}selected{% endif %}>Сервер</option>
+    <option value="switch" {% if source_type == "switch" %}selected{% endif %}>Свич</option>
+    <option value="wifi" {% if source_type == "wifi" %}selected{% endif %}>Wi-Fi</option>
+    <option value="network" {% if source_type == "network" %}selected{% endif %}>Мережевий пристрій</option>
+    <option value="printer" {% if source_type == "printer" %}selected{% endif %}>Принтер</option>
+  </select>
+  <select name="match_status">
+    <option value="" {% if not match_status %}selected{% endif %}>Всі збіги</option>
+    <option value="matched" {% if match_status == "matched" %}selected{% endif %}>Знайдено користувача</option>
+    <option value="manual" {% if match_status == "manual" %}selected{% endif %}>Ручна прив'язка</option>
+    <option value="not_found" {% if match_status == "not_found" %}selected{% endif %}>Не знайдено</option>
+    <option value="ambiguous" {% if match_status == "ambiguous" %}selected{% endif %}>Неоднозначно</option>
+    <option value="manual_not_found" {% if match_status == "manual_not_found" %}selected{% endif %}>Manual не знайдено</option>
+    <option value="manual_ambiguous" {% if match_status == "manual_ambiguous" %}selected{% endif %}>Manual неоднозначно</option>
+    <option value="not_enough_hostname_tokens" {% if match_status == "not_enough_hostname_tokens" %}selected{% endif %}>Мало токенів</option>
+  </select>
+  <button type="submit">Фільтр</button>
+</form>
+
+<section class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Hostname</th>
+        <th>П І Б</th>
+        <th>Відділ</th>
+        <th>Підрозділ</th>
+        <th>Працює на</th>
+        <th>IP</th>
+        <th>MAC</th>
+        <th>Розетка</th>
+        <th>Інв. ПК</th>
+        <th>Локація</th>
+        <th>AD</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for machine in machines %}
+      <tr>
+        <td>
+          <strong>{{ machine.hostname }}</strong>
+          <span class="muted">{{ machine.works_on or ("ВМ" if machine.source_type == "virtual" else "ПК") }}</span>
+        </td>
+        <td>{{ machine.full_name or "" }}</td>
+        <td>{{ machine.position_title or "" }}</td>
+        <td>{{ machine.department or machine.company or "" }}</td>
+        <td>{{ machine.works_on or "" }}</td>
+        <td>{{ machine.ip_address or "" }}</td>
+        <td>{{ machine.mac_address or "" }}</td>
+        <td>{{ machine.socket or "" }}</td>
+        <td>{{ machine.inventory_pc or "" }}</td>
+        <td>{{ machine.location or "" }}</td>
+        <td>
+          <span class="badge status-{{ machine.match_status }}" title="{{ machine.match_note or '' }}">{{ machine.match_status }}</span>
+        </td>
+        <td>
+          <div class="row-actions">
+            <a class="row-action secondary compact" href="/machines/{{ machine.id }}/view">Просмотр</a>
+            <a class="row-action compact" href="/machines/{{ machine.id }}">Правити</a>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="12" class="empty">Записів немає</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

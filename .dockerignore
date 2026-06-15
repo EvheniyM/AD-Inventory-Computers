@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.env
+exports/*.xlsx
+imports/*.xlsx
+pgdata/
+nginx/certs/*
+!nginx/certs/.gitkeep
+certs/ad/*
+!certs/ad/.gitkeep
+.git/

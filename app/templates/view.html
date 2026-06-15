@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}{{ machine.hostname }}{% endblock %}
+{% block content %}
+<section class="toolbar">
+  <div>
+    <h1>{{ machine.hostname }}</h1>
+    <p>{{ machine.full_name or "Користувач не знайдений" }}{% if machine.position_title %}; {{ machine.position_title }}{% endif %}</p>
+  </div>
+  <div class="actions">
+    <a class="button" href="/machines/{{ machine.id }}">Правити</a>
+    <a class="button secondary" href="/">Назад</a>
+  </div>
+</section>
+
+<section class="detail-grid">
+  <div class="facts">
+    <h2>Дані з AD</h2>
+    <dl>
+      <dt>Hostname</dt><dd>{{ machine.hostname or "" }}</dd>
+      <dt>DNS name</dt><dd>{{ machine.dns_hostname or "" }}</dd>
+      <dt>CN PC</dt><dd>{{ machine.computer_dn.split(",")[0] if machine.computer_dn else "" }}</dd>
+      <dt>OU</dt><dd>{{ machine.source_ou or "" }}</dd>
+      <dt>AD user</dt><dd>{{ machine.ad_user_sam or "" }}</dd>
+      <dt>Статус збігу</dt><dd>{{ machine.match_status }} ({{ machine.match_score }})</dd>
+      <dt>Нотатка</dt><dd>{{ machine.match_note or "" }}</dd>
+    </dl>
+  </div>
+
+  <div class="facts">
+    <h2>Картка комп'ютера</h2>
+    <dl>
+      <dt>П І Б</dt><dd>{{ machine.full_name or "" }}</dd>
+      <dt>Відділ</dt><dd>{{ machine.position_title or "" }}</dd>
+      <dt>Підрозділ</dt><dd>{{ machine.department or machine.company or "" }}</dd>
+      <dt>Працює на</dt><dd>{{ machine.works_on or "" }}</dd>
+      <dt>IP</dt><dd>{{ machine.ip_address or "" }}</dd>
+      <dt>MAC</dt><dd>{{ machine.mac_address or "" }}</dd>
+      <dt>Розетка</dt><dd>{{ machine.socket or "" }}</dd>
+      <dt>Інв. ПК</dt><dd>{{ machine.inventory_pc or "" }}</dd>
+      <dt>Комутатор</dt><dd>{{ machine.switch_port or "" }}</dd>
+      <dt>Локація</dt><dd>{{ machine.location or "" }}</dd>
+      <dt>Доступ</dt><dd>{{ machine.oschad_access or "" }}</dd>
+      <dt>Примітка</dt><dd>{{ machine.note or "" }}</dd>
+    </dl>
+  </div>
+
+  <div class="facts span-wide">
+    <h2>Технічні характеристики</h2>
+    <dl class="hardware-list">
+      <dt>Процесор</dt><dd>{{ machine.hardware_cpu or "" }}</dd>
+      <dt>ОЗУ</dt><dd>{{ machine.hardware_ram or "" }}</dd>
+      <dt>Диски</dt><dd>{{ machine.hardware_disks or "" }}</dd>
+      <dt>Відеокарта</dt><dd>{{ machine.hardware_gpu or "" }}</dd>
+      <dt>Материнська плата</dt><dd>{{ machine.hardware_motherboard or "" }}</dd>
+      <dt>Монітори</dt><dd>{{ machine.hardware_monitors or "" }}</dd>
+      <dt>Мережеві адаптери</dt><dd>{{ machine.hardware_network or "" }}</dd>
+      <dt>Оновлено</dt><dd>{{ machine.hardware_updated_at|local_dt }}</dd>
+    </dl>
+  </div>
+</section>
+{% endblock %}
